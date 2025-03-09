@@ -65,7 +65,7 @@ QA_Automation_Framework/
 - **Build Tool**: Maven
 - **Logging**: Log4j2
 - **Test Data Management**: CSV, JSON, YAML, Excel
-- **Reporting**: Extent Reports
+- **Reporting**: Extent Reports, TestNG Reports
 - **CI/CD**: Jenkins
 
 ## 📜 License
