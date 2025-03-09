@@ -1,32 +1,30 @@
 package com.automation.utils;
 
-import com.opencsv.CSVReader;
-import com.opencsv.exceptions.CsvException;
-
+import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 public class CsvReaderUtil {
-    public static List<Map<String, String>> readCsvData(String filePath) {
-        List<Map<String, String>> dataList = new ArrayList<>();
+    private static final String FILE_PATH = "src/test/resources/TestData/test-data.csv";
+    private static Map<String, String> csvData = new HashMap<>();
 
-        try (CSVReader reader = new CSVReader(new FileReader(filePath))) {
-            List<String[]> data = reader.readAll();
-            if (data.isEmpty()) return dataList;
+    static {
+        try (BufferedReader br = new BufferedReader(new FileReader(FILE_PATH))) {
+            String[] headers = br.readLine().split(","); // First line is header
+            String[] values = br.readLine().split(","); // Second line is data
 
-            String[] headers = data.get(0);
-            for (int i = 1; i < data.size(); i++) {
-                Map<String, String> row = new HashMap<>();
-                for (int j = 0; j < headers.length; j++) {
-                    row.put(headers[j], data.get(i)[j]);
-                }
-                dataList.add(row);
+            for (int i = 0; i < headers.length; i++) {
+                csvData.put(headers[i].trim(), values[i].trim());
             }
-        } catch (IOException | CsvException e) {
-            throw new RuntimeException("❌ Error reading CSV file: " + filePath, e);
+        } catch (IOException e) {
+            throw new RuntimeException("❌ Error reading CSV file: " + FILE_PATH, e);
         }
-        return dataList;
+    }
+
+    public static String readCsvData(String key) {
+        System.out.println("Reading "+ key +" from CSV file" );
+        return csvData.getOrDefault(key, "❌ Key not found: " + key);
     }
 }
-
